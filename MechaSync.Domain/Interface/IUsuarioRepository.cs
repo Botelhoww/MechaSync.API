@@ -2,9 +2,11 @@
 
 public interface IUsuarioRepository
 {
-        Usuario ObterPorId(int id);
-        IEnumerable<Usuario> ListarTodos();
-        void Adicionar(Usuario usuario);
-        void Atualizar(Usuario usuario);
-        void Remover(int id);
+    Task AddAsync(Usuario usuario);
+    Task<Usuario> GetByEmailAsync(string email);
+
+    //Task<Usuario> ObterPorId(int id);
+    //IEnumerable<Usuario> ListarTodos();
+    //Task Atualizar(Usuario usuario);
+    //Task Remover(int id);
 }

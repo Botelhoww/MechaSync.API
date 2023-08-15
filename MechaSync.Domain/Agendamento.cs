@@ -2,11 +2,11 @@
 
 public class Agendamento
 {
-    public Agendamento(int usuarioId, int veiculoId, DateTime data, string descricao, string status)
+    public Agendamento(int usuarioId, int veiculoId, DateTime dataAgendamento, string descricao, string status)
     {
         UsuarioId = usuarioId;
         VeiculoId = veiculoId;
-        Data = data;
+        DataAgendamento = dataAgendamento;
         Descricao = descricao;
         Status = status;
     }
@@ -14,7 +14,7 @@ public class Agendamento
     public int AgendamentoId { get; set; }
     public int UsuarioId { get; set; }
     public int VeiculoId { get; set; }
-    public DateTime Data { get; set; }
+    public DateTime DataAgendamento { get; set; }
     public string Descricao { get; set; }
     public string Status { get; set; }
 }

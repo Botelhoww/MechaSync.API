@@ -11,7 +11,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Interfaces\" />
+      <ProjectReference Include="..\MechaSync.Domain\MechaSync.Domain.csproj" />
+      <ProjectReference Include="..\MechaSync.Infrastructure\MechaSync.Infrastructure.csproj" />
     </ItemGroup>
+
 
 </Project>

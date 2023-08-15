@@ -1,4 +1,9 @@
+using MechaSync.Domain.Interface;
+using MechaSync.Infrastructure;
 using MechaSync.Infrastructure.Context;
+using MechaSync.Services;
+using MechaSync.Services.Interfaces;
+using MechaSync.Services.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +17,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MechaSyncDbContext>(options =>
     options.UseSqlServer("Server=BOTELHO\\SQLEXPRESS;Database=MechaSync;Trusted_Connection=true;TrustServerCertificate=true"));
 
-//builder.Services.AddScoped<IEmprestimoRepository, EmprestimoRepository>();
+builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+//builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
+// builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
+// builder.Services.AddScoped<IFaturaRepository, FaturaRepository>();
+// builder.Services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
+// builder.Services.AddScoped<IPecaRepository, PecaRepository>();
+// builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
 var app = builder.Build();
 
