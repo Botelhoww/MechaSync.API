@@ -1,16 +1,10 @@
-﻿using MechaSync.Domain;
-using MechaSync.Domain.DTOs;
+﻿using MechaSync.Domain.DTOs;
+using MechaSync.Domain.Requests;
 
 namespace MechaSync.Services.Interfaces;
 
 public interface IUsuarioService
 {
-    public Task<UsuarioDTO> RegisterAsync(Usuario usuario);
-
-
-
-    //public Task Remover(int id);
-    //public Task Atualizar(Usuario usuario);
-    //public IEnumerable<Usuario> ListarTodos();
-    //public Task<Usuario> ObterPorId(int id);
+    public Task<UsuarioDTO> RegisterAsync(RegisterRequest registerRequest);
+    public Task<UsuarioDTO> LoginAsync(LoginRequest loginRequest);
 }

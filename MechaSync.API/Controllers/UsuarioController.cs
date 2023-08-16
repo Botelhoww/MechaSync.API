@@ -1,5 +1,5 @@
 using FluentValidation;
-using MechaSync.Domain;
+using MechaSync.Domain.Requests;
 using MechaSync.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,22 +11,38 @@ public class UsuarioController : ControllerBase
 {
     private readonly IUsuarioService _usuarioService;
 
-    public UsuarioController(IUsuarioService usuarioService, IPasswordHasherService passwordHasherService)
+    public UsuarioController(IUsuarioService usuarioService)
     {
         _usuarioService = usuarioService;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> RegisterAsync(Usuario usuario)
+    [HttpPost("RegisterAsync")]
+    public async Task<IActionResult> RegisterAsync(RegisterRequest registerRequest)
     {
         try
         {
-            if (!ModelState.IsValid)
-                throw new Exception("Model is not valid");
+            await _usuarioService.RegisterAsync(registerRequest);
 
-            await _usuarioService.RegisterAsync(usuario);
+            return Created("RegisterAsync", registerRequest);
+        }
+        catch (ValidationException e)
+        {
+            throw new ValidationException(e.Errors);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 
-            return CreatedAtAction("ListarTodos", usuario);
+    [HttpPost("LoginAsync")]
+    public async Task<IActionResult> LoginAsync(LoginRequest loginRequest)
+    {
+        try
+        {
+            await _usuarioService.LoginAsync(loginRequest);
+
+            return Ok("Usuário logado!");
         }
         catch (ValidationException e)
         {

@@ -1,6 +1,8 @@
-﻿using MechaSync.Domain;
+﻿using FluentValidation;
+using MechaSync.Domain;
 using MechaSync.Domain.DTOs;
 using MechaSync.Domain.Interface;
+using MechaSync.Domain.Requests;
 using MechaSync.Services.Interfaces;
 using MechaSync.Services.Services;
 
@@ -10,27 +12,33 @@ public class UsuarioService : IUsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IPasswordHasherService _passwordHasherService;
+    private readonly IValidator<RegisterRequest> _registerValidator;
+    private readonly IValidator<LoginRequest> _loginValidator;
 
-    public UsuarioService(IUsuarioRepository usuarioRepository, IPasswordHasherService passwordHasherService)
+    public UsuarioService(IUsuarioRepository usuarioRepository,
+        IPasswordHasherService passwordHasherService,
+        IValidator<RegisterRequest> registerValidator,
+        IValidator<LoginRequest> loginValidator)
     {
         _usuarioRepository = usuarioRepository;
         _passwordHasherService = passwordHasherService;
-
+        _registerValidator = registerValidator;
+        _loginValidator = loginValidator;
     }
 
-    public async Task<UsuarioDTO> RegisterAsync(Usuario usuario)
+    public async Task<UsuarioDTO> RegisterAsync(RegisterRequest registerRequest)
     {
-        if (!EmailService.IsValid(usuario.Email))
-            throw new Exception($"Email ({usuario.Email}) não é válido!");
+        RegisterService.IsValid(registerRequest, _registerValidator);
 
-        var passwordHash = _passwordHasherService.Hash(usuario.Senha);
+        var passwordHash = _passwordHasherService.Hash(registerRequest.Senha);
 
         var user = new Usuario
         {
-            Nome = usuario.Nome,
+            Nome = registerRequest.Nome,
             Senha = passwordHash,
-            Email = usuario.Email,
-            Funcao = usuario.Funcao
+            Email = registerRequest.Email,
+            Funcao = registerRequest.Funcao,
+            CreatedDate = DateTime.Now
         };
 
         await _usuarioRepository.AddAsync(user);
@@ -39,16 +47,18 @@ public class UsuarioService : IUsuarioService
 
         return new UsuarioDTO
         {
-            Nome = usuario.Nome,
+            Nome = registerRequest.Nome,
             Token = jwt
         };
     }
 
-    public async Task<UsuarioDTO> LoginAsync(UsuarioDTO usuarioDto)
+    public async Task<UsuarioDTO> LoginAsync(LoginRequest loginRequest)
     {
-        var user = await _usuarioRepository.GetByEmailAsync(usuarioDto.Email);
+        LoginService.IsValid(loginRequest, _loginValidator);
 
-        var result = _passwordHasherService.VerificaSenha(user.Senha, usuarioDto.Senha);
+        var user = await _usuarioRepository.GetByEmailAsync(loginRequest.Email);
+
+        var result = _passwordHasherService.VerificaSenha(user.Senha, loginRequest.Senha);
 
         if (!result)
             throw new Exception("Senha ou Email Incorreto!");
@@ -61,13 +71,6 @@ public class UsuarioService : IUsuarioService
             Token = jwt
         };
     }
-
-
-
-
-
-
-
 
     //public IEnumerable<Usuario> ListarTodos()
     //{

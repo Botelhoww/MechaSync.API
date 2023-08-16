@@ -1,9 +1,12 @@
+using FluentValidation;
 using MechaSync.Domain.Interface;
+using MechaSync.Domain.Requests;
 using MechaSync.Infrastructure;
 using MechaSync.Infrastructure.Context;
 using MechaSync.Services;
 using MechaSync.Services.Interfaces;
 using MechaSync.Services.Services;
+using MechaSync.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +21,9 @@ builder.Services.AddDbContext<MechaSyncDbContext>(options =>
     options.UseSqlServer("Server=BOTELHO\\SQLEXPRESS;Database=MechaSync;Trusted_Connection=true;TrustServerCertificate=true"));
 
 builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+
+builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
+builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
