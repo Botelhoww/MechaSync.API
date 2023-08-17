@@ -5,7 +5,8 @@ namespace MechaSync.Infrastructure.Context
 {
     public class MechaSyncDbContext : DbContext
     {
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<User> Users { get; set; }
         
         public MechaSyncDbContext(DbContextOptions<MechaSyncDbContext> options) : base(options){}
 

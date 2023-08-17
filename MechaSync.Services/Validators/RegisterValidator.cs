@@ -18,11 +18,11 @@ namespace MechaSync.Services.Validators
                     .NotEmpty()
                     .WithMessage("Email não pode estar vazio!");
 
-                RuleFor(x => x.Senha)
+                RuleFor(x => x.Password)
                     .NotEmpty()
                     .WithMessage("Senha não pode estar vazia!");
 
-                RuleFor(x => x.Funcao)
+                RuleFor(x => x.Role)
                     .NotEmpty()
                     .WithMessage("Função não pode estar vazio!");
             });
