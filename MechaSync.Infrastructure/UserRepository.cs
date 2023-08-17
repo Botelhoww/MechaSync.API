@@ -23,18 +23,18 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetByEmailAsync(string email)
     {
-        var teste = await _context.Users.Where(x => x.Email == email).SingleAsync();
+        var teste = await _context.User.Where(x => x.Email == email).SingleAsync();
         return teste;
     }
 
     public async Task<User> GetByIdAsync(int id)
     {
-        return await _context.Users.Where(x => x.Id == id).SingleAsync();
+        return await _context.User.Where(x => x.Id == id).SingleAsync();
     }
 
     public IEnumerable<User> GetAllAsync()
     {
-        return _context.Users.ToList().OrderByDescending(x => x.Id);
+        return _context.User.ToList().OrderByDescending(x => x.Id);
     }
 
     public async Task UpdateAsync(UserDto usuario)
@@ -45,7 +45,7 @@ public class UserRepository : IUserRepository
 
     public async Task Delete(int id)
     {
-        var usuario = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var usuario = await _context.User.FirstOrDefaultAsync(u => u.Id == id);
 
         if (usuario == null)
             throw new Exception($"Usuário com ID {id} não encontrado");
