@@ -22,6 +22,6 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Account> GetByEmailAsync(string email)
     {
-        return await _context.Accounts.Where(x => x.Email == email).SingleAsync();
+        return await _context.Account.Where(x => x.Email == email).SingleAsync();
     }
 }
