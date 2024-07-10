@@ -12,15 +12,15 @@ namespace MechaSync.Services.Validators
             {
                 RuleFor(x => x.Email)
                     .EmailAddress()
-                    .WithMessage("Este email não está válido!");
+                    .WithMessage("Email not valid!");
 
                 RuleFor(x => x.Email)
                     .NotEmpty()
-                    .WithMessage("Email não pode estar vazio!");
+                    .WithMessage("Email can`t be empty!");
 
                 RuleFor(x => x.Password)
                     .NotEmpty()
-                    .WithMessage("Senha não pode estar vazia!");
+                    .WithMessage("Password can`t be empty!");
             });
         }
     }

@@ -5,20 +5,17 @@ namespace MechaSync.Infrastructure.Context
 {
     public class MechaSyncDbContext : DbContext
     {
-        public DbSet<Address> Addresses { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
-        public DbSet<FAQ> FAQs { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
-        public DbSet<Offer> Offers { get; set; }
-        public DbSet<PaymentMethod> PaymentMethods { get; set; }
-        public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<Review> Reviews { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<ServiceCategoryRelation> ServiceCategoryRelations { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
+        public DbSet<InventoryCategory> InventoryCategories { get; set; }
+        public DbSet<InventoryItemRelation> InventoryItemRelations { get; set; }
+        public DbSet<RepairTracking> RepairTrackings { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public MechaSyncDbContext(DbContextOptions<MechaSyncDbContext> options) : base(options){}
 
@@ -30,7 +27,6 @@ namespace MechaSync.Infrastructure.Context
             modelBuilder.Entity<ServiceCategoryRelation>()
                 .HasKey(sc => new { sc.ServiceId, sc.CategoryId });
 
-            // Definição de relacionamentos
             modelBuilder.Entity<ServiceCategoryRelation>()
                 .HasOne(sc => sc.Service)
                 .WithMany(s => s.ServiceCategoryRelations)
@@ -40,12 +36,21 @@ namespace MechaSync.Infrastructure.Context
                 .HasOne(sc => sc.ServiceCategory)
                 .WithMany(sc => sc.ServiceCategoryRelations)
                 .HasForeignKey(sc => sc.CategoryId);
+
+            // Chave composta para InventoryItemRelation
+            modelBuilder.Entity<InventoryItemRelation>()
+                .HasKey(ir => new { ir.InventoryItemId, ir.InventoryCategoryId });
+
+            modelBuilder.Entity<InventoryItemRelation>()
+                .HasOne(ir => ir.InventoryItem)
+                .WithMany(ii => ii.InventoryItemRelations)
+                .HasForeignKey(ir => ir.InventoryItemId);
+
+            modelBuilder.Entity<InventoryItemRelation>()
+                .HasOne(ir => ir.InventoryCategory)
+                .WithMany(ic => ic.InventoryItemRelations)
+                .HasForeignKey(ir => ir.InventoryCategoryId);
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    base.OnConfiguring(optionsBuilder);
-        //    optionsBuilder.UseSqlServer("Server=BDC;Database=MechaSync;Trusted_Connection=true;TrustServerCertificate=true");
-        //}
     }
 }

@@ -3,7 +3,6 @@ using MechaSync.Domain;
 using MechaSync.Domain.Dtos;
 using MechaSync.Domain.Requests;
 using MechaSync.Services.Interfaces;
-using MechaSync.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MechaSync.API.Controllers;
@@ -45,7 +44,7 @@ public class UserController : ControllerBase
         {
             await _userService.LoginAsync(loginRequest);
 
-            return Ok("Usuário logado!");
+            return Ok("User logged in!");
         }
         catch (ValidationException e)
         {

@@ -36,12 +36,12 @@ public class UserService : IUserService
             UserName = registerRequest.Name,
             PasswordHash = passwordHash,
             Email = registerRequest.Email,
-            Role = registerRequest.Role,
             CreatedAt = DateTime.Now
         };
 
         await _userRepository.InsertAsync(user);
 
+        //TODO: need to implement JWT auth.
         var jwt = "tokenzadaRegister";
 
         return new UserDto
@@ -61,8 +61,9 @@ public class UserService : IUserService
         var result = _passwordHasherService.VerifyPassword(user.PasswordHash, loginRequest.Password);
 
         if (!result)
-            throw new Exception("Email ou password incorreto!");
+            throw new Exception("Incorrect password or email!");
 
+        //TODO: need to implement JWT auth.
         var jwt = "tokenzadaLogin";
 
         return new UserDto
@@ -87,7 +88,7 @@ public class UserService : IUserService
         if (EmailService.IsValid(usuario.Email))
             await _userRepository.UpdateAsync(usuario);
         else
-            throw new Exception($"Email {usuario.Email} não é válido!");
+            throw new Exception($"Email {usuario.Email} is not valid!");
     }
 
     public Task Delete(int id)
