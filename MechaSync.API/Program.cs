@@ -3,7 +3,6 @@ using MechaSync.Domain.Interface;
 using MechaSync.Domain.Requests;
 using MechaSync.Infrastructure;
 using MechaSync.Infrastructure.Context;
-using MechaSync.Services;
 using MechaSync.Services.Interfaces;
 using MechaSync.Services.Services;
 using MechaSync.Services.Validators;
@@ -18,23 +17,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MechaSyncDbContext>(options =>
-    options.UseSqlServer("Server=BOTELHO\\SQLEXPRESS;Database=MechaSync;Trusted_Connection=true;TrustServerCertificate=true"));
+    options.UseSqlServer("Server=BDC;Database=MechaSync;Trusted_Connection=true;TrustServerCertificate=true"));
 
 builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
 
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
-// builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
-// builder.Services.AddScoped<IFaturaRepository, FaturaRepository>();
-// builder.Services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
-// builder.Services.AddScoped<IPecaRepository, PecaRepository>();
-// builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
 var app = builder.Build();
 

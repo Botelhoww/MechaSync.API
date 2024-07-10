@@ -4,18 +4,17 @@ using MechaSync.Domain.Dtos;
 using MechaSync.Domain.Interface;
 using MechaSync.Domain.Requests;
 using MechaSync.Services.Interfaces;
-using MechaSync.Services.Services;
 
-namespace MechaSync.Services;
+namespace MechaSync.Services.Services;
 
-public class AccountService : IAccountService
+public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasherService _passwordHasherService;
     private readonly IValidator<RegisterRequest> _registerValidator;
     private readonly IValidator<LoginRequest> _loginValidator;
 
-    public AccountService(IUserRepository userRepository,
+    public UserService(IUserRepository userRepository,
         IPasswordHasherService passwordHasherService,
         IValidator<RegisterRequest> registerValidator,
         IValidator<LoginRequest> loginValidator)
@@ -34,11 +33,11 @@ public class AccountService : IAccountService
 
         var user = new User
         {
-            Name = registerRequest.Name,
-            HashedPassword = passwordHash,
+            UserName = registerRequest.Name,
+            PasswordHash = passwordHash,
             Email = registerRequest.Email,
             Role = registerRequest.Role,
-            CreatedDate = DateTime.Now
+            CreatedAt = DateTime.Now
         };
 
         await _userRepository.InsertAsync(user);
@@ -53,23 +52,46 @@ public class AccountService : IAccountService
         };
     }
 
-    public async Task<AccountDto> LoginAsync(LoginRequest loginRequest)
+    public async Task<UserDto> LoginAsync(LoginRequest loginRequest)
     {
         LoginService.IsValid(loginRequest, _loginValidator);
 
         User user = await _userRepository.GetByEmailAsync(loginRequest.Email);
 
-        var result = _passwordHasherService.VerifyPassword(user.HashedPassword, loginRequest.Password);
+        var result = _passwordHasherService.VerifyPassword(user.PasswordHash, loginRequest.Password);
 
         if (!result)
             throw new Exception("Email ou password incorreto!");
 
         var jwt = "tokenzadaLogin";
 
-        return new AccountDto
+        return new UserDto
         {
-            Nome = user.Name,
+            Name = user.UserName,
             Token = jwt
         };
+    }
+
+    public IEnumerable<User> GetAllAsync()
+    {
+        return _userRepository.GetAllAsync();
+    }
+
+    public Task<User> GetByIdAsync(int id)
+    {
+        return _userRepository.GetByIdAsync(id);
+    }
+
+    public async Task UpdateAsync(UserDto usuario)
+    {
+        if (EmailService.IsValid(usuario.Email))
+            await _userRepository.UpdateAsync(usuario);
+        else
+            throw new Exception($"Email {usuario.Email} não é válido!");
+    }
+
+    public Task Delete(int id)
+    {
+        return _userRepository.Delete(id);
     }
 }

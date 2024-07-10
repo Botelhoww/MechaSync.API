@@ -15,26 +15,16 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task AddAsync(User usuario)
+    {
+        _context.Add(usuario);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task InsertAsync(User user)
     {
         _context.Add(user);
         await _context.SaveChangesAsync();
-    }
-
-    public async Task<User> GetByEmailAsync(string email)
-    {
-        var teste = await _context.Users.Where(x => x.Email == email).SingleAsync();
-        return teste;
-    }
-
-    public async Task<User> GetByIdAsync(int id)
-    {
-        return await _context.Users.Where(x => x.Id == id).SingleAsync();
-    }
-
-    public IEnumerable<User> GetAllAsync()
-    {
-        return _context.Users.ToList().OrderByDescending(x => x.Id);
     }
 
     public async Task UpdateAsync(UserDto usuario)
@@ -52,5 +42,21 @@ public class UserRepository : IUserRepository
 
         _context.Remove(usuario);
         await _context.SaveChangesAsync();
+    }
+
+    public IEnumerable<User> GetAllAsync()
+    {
+        return _context.Users.ToList().OrderByDescending(x => x.Id);
+    }
+
+    public async Task<User> GetByEmailAsync(string email)
+    {
+        var teste = await _context.Users.Where(x => x.Email == email).SingleAsync();
+        return teste;
+    }
+
+    public async Task<User> GetByIdAsync(int id)
+    {
+        return await _context.Users.Where(x => x.Id == id).SingleAsync();
     }
 }

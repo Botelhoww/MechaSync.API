@@ -4,6 +4,8 @@ namespace MechaSync.Domain.Interface;
 
 public interface IUserRepository
 {
+    Task AddAsync(User usuario);
+
     Task InsertAsync(User usuario);
     Task<User> GetByEmailAsync(string email);
     Task<User> GetByIdAsync(int id);

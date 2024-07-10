@@ -3,6 +3,7 @@ using MechaSync.Domain;
 using MechaSync.Domain.Dtos;
 using MechaSync.Domain.Requests;
 using MechaSync.Services.Interfaces;
+using MechaSync.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MechaSync.API.Controllers;
@@ -16,6 +17,44 @@ public class UserController : ControllerBase
     public UserController(IUserService usuarioService)
     {
         _userService = usuarioService;
+    }
+
+    [HttpPost("RegisterAsync")]
+    public async Task<IActionResult> RegisterAsync(RegisterRequest registerRequest)
+    {
+        try
+        {
+            await _userService.RegisterAsync(registerRequest);
+
+            return Created("RegisterAsync", registerRequest);
+        }
+        catch (ValidationException e)
+        {
+            throw new ValidationException(e.Errors);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    [HttpPost("LoginAsync")]
+    public async Task<IActionResult> LoginAsync(LoginRequest loginRequest)
+    {
+        try
+        {
+            await _userService.LoginAsync(loginRequest);
+
+            return Ok("Usuário logado!");
+        }
+        catch (ValidationException e)
+        {
+            throw new ValidationException(e.Errors);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     [HttpGet]

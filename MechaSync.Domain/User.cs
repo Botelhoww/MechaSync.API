@@ -3,9 +3,16 @@
 public class User
 {
     public int Id { get; set; }
-    public required string Name { get; set; }
-    public required string Email { get; set; }
-    public required string HashedPassword { get; set; }
-    public string? Role { get; set; }
-    public DateTime CreatedDate { get; set; }
+    public string? UserName { get; set; }
+    public string? Email { get; set; }
+    public string? PasswordHash { get; set; }
+    public int Role { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    public ICollection<Address> Addresses { get; set; }
+    public ICollection<PaymentMethod> PaymentMethods { get; set; }
+    public ICollection<Review> Reviews { get; set; }
+    public ICollection<Appointment> Appointments { get; set; }
+    public ICollection<Notification> Notifications { get; set; }
+    public ICollection<Contact> Contacts { get; set; }
 }
