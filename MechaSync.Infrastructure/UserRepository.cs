@@ -44,9 +44,9 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public IEnumerable<User> GetAllAsync()
+    public async Task<IEnumerable<User>> GetAllAsync()
     {
-        return _context.Users.ToList().OrderByDescending(x => x.Id);
+        return await _context.Users.ToListAsync();
     }
 
     public async Task<User> GetByEmailAsync(string email)

@@ -28,14 +28,15 @@ namespace MechaSync.Infrastructure.Context
                 .HasKey(sc => new { sc.ServiceId, sc.CategoryId });
 
             modelBuilder.Entity<ServiceCategoryRelation>()
-                .HasOne(sc => sc.Service)
-                .WithMany(s => s.ServiceCategoryRelations)
-                .HasForeignKey(sc => sc.ServiceId);
-
-            modelBuilder.Entity<ServiceCategoryRelation>()
                 .HasOne(sc => sc.ServiceCategory)
                 .WithMany(sc => sc.ServiceCategoryRelations)
                 .HasForeignKey(sc => sc.CategoryId);
+
+            // Relacionamento entre Service e User
+            modelBuilder.Entity<Service>()
+                .HasOne(s => s.User)
+                .WithMany(u => u.Services)
+                .HasForeignKey(s => s.UserId);
 
             // Chave composta para InventoryItemRelation
             modelBuilder.Entity<InventoryItemRelation>()

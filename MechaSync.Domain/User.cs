@@ -14,4 +14,5 @@ public class User
     public ICollection<Appointment> Appointments { get; set; }
     public ICollection<Notification> Notifications { get; set; }
     public ICollection<Contact> Contacts { get; set; }
+    public ICollection<Service> Services { get; set; }
 }

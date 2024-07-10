@@ -73,14 +73,14 @@ public class UserService : IUserService
         };
     }
 
-    public IEnumerable<User> GetAllAsync()
+    public async Task<IEnumerable<User>> GetAllAsync()
     {
-        return _userRepository.GetAllAsync();
+        return await _userRepository.GetAllAsync();
     }
 
-    public Task<User> GetByIdAsync(int id)
+    public async Task<User> GetByIdAsync(int id)
     {
-        return _userRepository.GetByIdAsync(id);
+        return await _userRepository.GetByIdAsync(id);
     }
 
     public async Task UpdateAsync(UserDto usuario)
@@ -91,8 +91,8 @@ public class UserService : IUserService
             throw new Exception($"Email {usuario.Email} is not valid!");
     }
 
-    public Task Delete(int id)
+    public async Task Delete(int id)
     {
-        return _userRepository.Delete(id);
+        await _userRepository.Delete(id);
     }
 }
